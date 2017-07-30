@@ -1,0 +1,116 @@
+{
+  "favorite_list": [
+    {
+      "category": "Food",
+      "products": [
+        {
+          "product_type": "salt",
+          "favorites": [
+            {
+              "product_name": "Kosher salt",
+              "upc_code": 1232432434,
+              "manufacturer": "Salton",
+              "image": null,
+              "additional_info": "Still deciding between coarse or powdered"
+            }
+          ],
+          "acceptables": [],
+          "unacceptables": []
+        },
+        {
+          "product_type": "milk",
+          "favorites": [
+            {
+              "product_name": "Nielsen 0.1% skimmed milk",
+              "upc_code": 1232432434,
+              "manufacturer": "Nielsen",
+              "image": null,
+              "additional_info": "It's milk! good for bones"
+            }
+          ],
+          "acceptables": [],
+          "unacceptables": []
+        },
+        {
+          "product_type": "creamer",
+          "favorites": [
+            {
+              "product_name": "Half and Half 5%",
+              "upc_code": 1232432434,
+              "manufacturer": "Nielsen",
+              "image": null,
+              "additional_info": "Delicious!"
+            }
+          ],
+          "acceptables": [],
+          "unacceptables": [
+            {
+              "product_name": "Half and Half 20%",
+              "upc_code": 1232432434,
+              "manufacturer": "Nielsen",
+              "image": null,
+              "additional_info": "Too Fatty!"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category": "Cleaners",
+      "products": [
+        {
+          "product_type": "cleaning tissue",
+          "favorites": [
+            {
+              "product_name": "Spring Waterfall",
+              "upc_code": 1232432434,
+              "manufacturer": "Lysol",
+              "image": null,
+              "additional_info": "Smell good!"
+            }
+          ],
+          "acceptables": [
+            {
+              "product_name": "Lysol Citrus",
+              "upc_code": 1232432434,
+              "manufacturer": "Lysol",
+              "image": null,
+              "additional_info": "Not as good as the other!"
+            }
+          ],
+          "unacceptables": []
+        },
+        {
+          "product_type": "floor care",
+          "favorites": [
+            {
+              "product_name": "Swiffer Wet lavender",
+              "upc_code": 1232432434,
+              "manufacturer": "Lysol",
+              "image": null,
+              "additional_info": "The purple one - but take care to not buy the one for the wrong swiffer motel!"
+            }
+          ],
+          "acceptables": [
+            {
+              "product_name": "Sweefer Wet Citrus",
+              "upc_code": 1232432434,
+              "manufacturer": "Lysol",
+              "image": null,
+              "additional_info": "Not as good as the other!"
+            }
+          ],
+          "unacceptables": [
+            {
+              "product_name": "Dollarama something-something",
+              "upc_code": 1232432434,
+              "manufacturer": "Who knows?",
+              "image": null,
+              "additional_info": "Awful! but cheap..."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

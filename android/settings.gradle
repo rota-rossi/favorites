@@ -1,0 +1,3 @@
+rootProject.name = 'favorites'
+
+include ':app'
