@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Content, Text, Icon, Button, List, ListItem, Right, Separator } from 'native-base';
 import { Actions } from 'react-native-router-flux'
+import { inject, observer } from 'mobx-react'
 
 import initialCase from '../utils/stringUtils'
 
@@ -9,7 +10,7 @@ let Datastore = require('react-native-local-mongodb')
 // let db = new Datastore({ filename: 'favoritesDocs', autoload: true });
 let dbProducts = new Datastore({ filename: 'productsDocs', autoload: true })
 
-
+@inject('favoriteStore') @observer
 export default class FavoriteDetails extends Component {
   constructor(props) {
     super(props)
@@ -19,12 +20,12 @@ export default class FavoriteDetails extends Component {
     }
   }
 
-  componentDidMount() {
-    let { _id: subCategoryID } = this.props.subCategory
-    dbProducts.find({ subCategoryID }, (err, res) => {
-      this.setState({ products: res })
-    })
-  }
+  // componentDidMount() {
+  //   let { _id: subCategoryID } = this.props.subCategory
+  //   dbProducts.find({ subCategoryID }, (err, res) => {
+  //     this.setState({ products: res })
+  //   })
+  // }
 
   // componentWillReceiveProps(nextProps) {
   //   let { subCategoryID } = nextProps.type
@@ -39,9 +40,11 @@ export default class FavoriteDetails extends Component {
     title: initialCase(navigation.state.params.subCategory.subCategoryName)
   });
   render() {
-    const { products, types } = this.state
+    const { types } = this.state
     const { _id: subCategoryID } = this.props.subCategory
     const { _id: categoryID } = this.props.category
+    const products = this.props.favoriteStore.filteredProducts(subCategoryID)
+
     return (
       <Container>
         <Content>

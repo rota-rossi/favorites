@@ -3,53 +3,39 @@ import React, { Component } from 'react';
 import { List, ListItem, Text, Separator, Container, Content, View, Footer, Button, Grid, Col, Spinner } from 'native-base';
 import { Actions } from 'react-native-router-flux'
 import { ScrollView, RefreshControl } from 'react-native'
-let Datastore = require('react-native-local-mongodb')
 
+import { inject, observer } from 'mobx-react'
+
+let Datastore = require('react-native-local-mongodb')
 let dbCategories = new Datastore({ filename: 'categoriesDocs', autoload: true })
 let dbSubCategories = new Datastore({ filename: 'subCategoriesDocs', autoload: true })
 
 import FavoriteListItem from './FavoriteListItem'
 
+@inject('favoriteStore') @observer
 export default class FavoritesList extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      categories: [],
-      subCategories: [],
+      // categories: [],
+      // subCategories: [],
       refreshing: false
     }
   }
-  componentDidMount() {
-    this.reloadData()
-  }
+  // componentDidMount() {
+  //   // this.reloadData()
+  //   const { categories, subCategories } = this.props.favoriteStore
+  //   this.setState({
+  //     categories, subCategories
+  //   })
+  // }
 
   reloadData() {
-    this.setState({ refreshing: true });
-    dbCategories.loadDatabase((err) => {
-      if (err) {
-        console.err(err)
-      } else {
-        dbCategories.find({}, (err, categories) => {
-          dbSubCategories.loadDatabase((err) => {
-            dbSubCategories.find({}, (err, subCategories) => {
-              if (err) {
-                console.log(err)
-              } else {
-                let catSorted = categories.sort(
-                  (a, b) =>
-                    a.categoryName < b.categoryName ? -1 : 1
-                )
-                this.setState({ categories: catSorted, subCategories, refreshing: false })
-              }
-            })
-          })
-        })
-      }
-    })
+    this.props.favoriteStore.readData()
   }
 
   render() {
-    const { categories, subCategories } = this.state
+    const { sortedCategories: categories, subCategories } = this.props.favoriteStore
     return (
       <Container>
         <Content

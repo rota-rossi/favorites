@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { AppRegistry } from 'react-native';
 import { Container, Content, Root, List, ListItem, Text, Icon } from 'native-base';
 import { Router, Scene, } from 'react-native-router-flux';
+import { Provider } from 'mobx-react'
 
 import Nav from './Nav'
 import FavoritesList from './FavoritesList'
@@ -10,6 +11,7 @@ import ProductDetails from './ProductDetails'
 import AddCategory from './AddCategory'
 import AddSubCategory from './AddSubCategory'
 
+import favoriteStore from './store/favorites'
 
 // import createDB from '../seeds/createDB'
 // createDB()
@@ -23,7 +25,9 @@ class HomeScreen extends Component {
   });
   render() {
     return (
+
       <FavoritesList />
+
     );
   }
 }
@@ -43,7 +47,9 @@ const AppNavigator = () => (
 
 const App = () => (
   <Root>
-    <AppNavigator />
+    <Provider favoriteStore={favoriteStore}>
+      <AppNavigator />
+    </Provider>
   </Root>
 )
 AppRegistry.registerComponent('favorites', () => App);

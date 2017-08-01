@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 // import { Text, View } from 'react-native';
 import { Content, Form, Item, Label, Input, Text, Button, Separator, Toast, Picker } from 'native-base'
 import { Actions } from 'react-native-router-flux'
+import { inject } from 'mobx-react'
 
 let Datastore = require('react-native-local-mongodb');
 let dbSubCategories = new Datastore({ filename: 'subCategoriesDocs', autoload: true })
@@ -9,6 +10,7 @@ let dbCategories = new Datastore({ filename: 'categoriesDocs', autoload: true })
 
 const PickerItem = Picker.Item
 
+@inject('favoriteStore')
 export default class AddSubCategory extends Component {
   constructor(props) {
     super(props)
@@ -19,48 +21,33 @@ export default class AddSubCategory extends Component {
     }
   }
 
-  componentDidMount() {
-    dbCategories.loadDatabase((err) => {
-      if (err) {
-        console.err(err)
-      } else {
-        dbCategories.find({}, (err, res) => {
-          if (err) {
-            console.error(err)
-          } else {
-            this.setState({ categories: res })
-          }
-        })
-      }
-    })
-  }
-
   changeSelectedCategory = (value) => {
     this.setState({ category: value })
   }
 
   saveSubCategory = () => {
-    dbSubCategories.insert({ subCategoryName: this.state.subCategoryName, categoryID: this.state.category }, (err, res) => {
-      if (err) {
-        Toast.show({
-          text: 'Error!',
-          type: 'error',
-          position: 'bottom',
-          duration: 5000
-        })
-      } else {
+    this.props.favoriteStore.addSubCategory(this.state.subCategoryName, this.state.category)
+      .then(result => {
         Toast.show({
           text: 'Saved Successfully!',
           type: 'success',
           position: 'bottom',
           duration: 5000
         })
-        Actions.pop()
-      }
-    })
+      })
+      .catch(error => {
+        Toast.show({
+          text: error,
+          type: 'error',
+          position: 'bottom',
+          duration: 5000
+        })
+      })
+    Actions.pop()
   }
   render() {
-    const { category, subCategoryName, categories } = this.state
+    const { categories } = this.props.favoriteStore
+    const { subCategoryName, category } = this.state
     return (
       <Content >
         <Form style={{ backgroundColor: 'white' }}>
