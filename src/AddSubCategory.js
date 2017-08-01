@@ -20,11 +20,17 @@ export default class AddSubCategory extends Component {
   }
 
   componentDidMount() {
-    dbCategories.find({}, (err, res) => {
+    dbCategories.loadDatabase((err) => {
       if (err) {
-        console.error(err)
+        console.err(err)
       } else {
-        this.setState({ categories: res })
+        dbCategories.find({}, (err, res) => {
+          if (err) {
+            console.error(err)
+          } else {
+            this.setState({ categories: res })
+          }
+        })
       }
     })
   }
@@ -56,7 +62,7 @@ export default class AddSubCategory extends Component {
   render() {
     const { category, subCategoryName, categories } = this.state
     return (
-      <Content>
+      <Content >
         <Form style={{ backgroundColor: 'white' }}>
           <Item>
             <Label>Sub-category Name:</Label>
@@ -82,7 +88,7 @@ export default class AddSubCategory extends Component {
             <Text>Save Sub-category</Text>
           </Button>
         </Form>
-      </Content>
+      </Content >
     );
   }
 }
