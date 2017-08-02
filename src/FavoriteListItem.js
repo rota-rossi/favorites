@@ -5,11 +5,17 @@ import { Actions } from 'react-native-router-flux';
 
 export default class FavoriteListItem extends Component {
   render() {
-    const { subCategoryName } = this.props.subCategory
+    const { subCategory, category } = this.props
+    const { subCategoryName } = subCategory
     return (
-      <ListItem onPress={() => Actions.FavoriteDetails({ subCategory: this.props.subCategory, category: this.props.category })}>
-        <Text>{initialCase(subCategoryName)}</Text>
-        <Right><Icon name="ios-arrow-forward" /></Right>
+      <ListItem
+        onPress={() => Actions.FavoriteDetails({ subCategory, category })}>
+        <Text>
+          {initialCase(subCategoryName)}
+        </Text>
+        <Right>
+          <Icon name="ios-arrow-forward" />
+        </Right>
       </ListItem>
     );
   }

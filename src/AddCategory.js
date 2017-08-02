@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-// import { Text, View } from 'react-native';
-import { Content, Form, Item, Label, Input, Text, Button, Separator, Toast } from 'native-base'
+import { Container, Content, Form, Item, Label, Input, Text, Button, Separator, Toast } from 'native-base'
 import { Actions } from 'react-native-router-flux'
 import { inject } from 'mobx-react'
 
-let Datastore = require('react-native-local-mongodb');
-let dbCategories = new Datastore({ filename: 'categoriesDocs', autoload: true })
+import NavHeader from './common/NavHeader'
 
 @inject('favoriteStore')
 export default class AddCategory extends Component {
@@ -37,20 +35,23 @@ export default class AddCategory extends Component {
 
   render() {
     return (
-      <Content>
-        <Form style={{ backgroundColor: 'white' }}>
-          <Item>
-            <Label>Category Name:</Label>
-            <Input
-              value={this.state.category}
-              onChangeText={(category) => this.setState({ category })} />
-          </Item>
-          <Separator />
-          <Button full onPress={this.saveCategory} disabled={!this.state.category.length}>
-            <Text>Save Category</Text>
-          </Button>
-        </Form>
-      </Content>
+      <Container>
+        <NavHeader back title='Add Category' />
+        <Content>
+          <Form style={{ backgroundColor: 'white' }}>
+            <Item>
+              <Label>Category Name:</Label>
+              <Input
+                value={this.state.category}
+                onChangeText={(category) => this.setState({ category })} />
+            </Item>
+            <Separator />
+            <Button full onPress={this.saveCategory} disabled={!this.state.category.length}>
+              <Text>Save Category</Text>
+            </Button>
+          </Form>
+        </Content>
+      </Container>
     );
   }
 }

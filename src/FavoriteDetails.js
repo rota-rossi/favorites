@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-import { Container, Content, Text, Icon, Button, List, ListItem, Right, Separator } from 'native-base';
+import { Container, Content, Text, Icon, Button, Left, Title, Body, List, ListItem, Right, Separator } from 'native-base';
 import { Actions } from 'react-native-router-flux'
 import { inject, observer } from 'mobx-react'
 
 import initialCase from '../utils/stringUtils'
 
-let Datastore = require('react-native-local-mongodb')
+import NavHeader from './common/NavHeader'
 
-// let db = new Datastore({ filename: 'favoritesDocs', autoload: true });
-let dbProducts = new Datastore({ filename: 'productsDocs', autoload: true })
 
 @inject('favoriteStore') @observer
 export default class FavoriteDetails extends Component {
@@ -20,36 +18,17 @@ export default class FavoriteDetails extends Component {
     }
   }
 
-  // componentDidMount() {
-  //   let { _id: subCategoryID } = this.props.subCategory
-  //   dbProducts.find({ subCategoryID }, (err, res) => {
-  //     this.setState({ products: res })
-  //   })
-  // }
-
-  // componentWillReceiveProps(nextProps) {
-  //   let { subCategoryID } = nextProps.type
-
-  //   dbProducts.find({ subCategoryID }, (err, res) => {
-
-  //     this.setState({ products: res })
-  //   })
-  // }
-
-  static navigationOptions = ({ navigation }) => ({
-    title: initialCase(navigation.state.params.subCategory.subCategoryName)
-  });
   render() {
     const { types } = this.state
-    const { _id: subCategoryID } = this.props.subCategory
+    const { _id: subCategoryID, subCategoryName } = this.props.subCategory
     const { _id: categoryID } = this.props.category
     const products = this.props.favoriteStore.filteredProducts(subCategoryID)
 
     return (
       <Container>
-        <Content>
-          <List style={{ backgroundColor: 'white' }}
-          >
+        <NavHeader back title={initialCase(subCategoryName)} />
+        <Content style={{ backgroundColor: 'white' }}>
+          <List>
             {types.map(type =>
               <Content key={type}>
                 <Separator>

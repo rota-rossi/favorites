@@ -7,12 +7,31 @@ var dbProducts = new Datastore({ filename: 'productsDocs', autoload: true })
 
 
 class Favorites {
-    @observable categories = [];
-    @observable subCategories = [];
-    @observable products = [];
+    @observable _categories = [];
+    @observable _subCategories = [];
+    @observable _products = [];
 
     constructor() {
         this.readData()
+    }
+
+    @computed get categories() {
+        return this._categories.sort(
+            (a, b) =>
+                a.categoryName < b.categoryName ? -1 : 1
+        )
+    }
+    @computed get subCategories() {
+        return this._subCategories.sort(
+            (a, b) =>
+                a.subCategoryName < b.subCategoryName ? -1 : 1
+        )
+    }
+    @computed get products() {
+        return this._products.sort(
+            (a, b) =>
+                a.productName < b.productName ? -1 : 1
+        )
     }
 
     readData() {
@@ -27,7 +46,7 @@ class Favorites {
                 if (err) {
                     console.error(err)
                 } else {
-                    this.categories = categories
+                    this._categories = categories
                 }
             })
         })
@@ -38,35 +57,36 @@ class Favorites {
                 if (err) {
                     console.log(err)
                 } else {
-                    this.subCategories = subCategories
+                    this._subCategories = subCategories
                 }
             })
         })
     }
     readProducts() {
-
         dbProducts.loadDatabase((err) => {
             dbProducts.find({}, (err, products) => {
                 if (err) {
                     console.log(err)
                 } else {
-                    this.products = products
+                    this._products = products
                 }
             })
         })
     }
 
+    getProduct(productID) {
+        return this._products.find(product => product._id === productID)
+    }
 
-    @computed get sortedCategories() {
-        return this.categories.sort(
-            (a, b) =>
-                a.categoryName < b.categoryName ? -1 : 1
-        )
+    filteredSubCategories(categoryID) {
+
+        return this._subCategories.filter(subCategory => subCategory.categoryID === categoryID)
     }
 
     filteredProducts(subCategoryID) {
-        return this.products.filter(product => product.subCategoryID === subCategoryID)
+        return this._products.filter(product => product.subCategoryID === subCategoryID)
     }
+
 
     addCategory(category) {
         return new Promise((request, reject) => {
@@ -92,6 +112,33 @@ class Favorites {
                 }
             })
         })
+    }
+
+    saveProduct(product) {
+        if (product._id) {
+            return new Promise((request, reject) => {
+                dbProducts.update({ _id: product._id }, product, (err, res) => {
+                    if (err) {
+                        reject(err)
+                    } else {
+                        this.readProducts()
+                        request(product)
+                    }
+                })
+
+            })
+        } else {
+            return new Promise((request, reject) => {
+                dbProducts.insert(product, (err, res) => {
+                    if (err) {
+                        reject(err)
+                    } else {
+                        this.readProducts()
+                        request(res)
+                    }
+                })
+            })
+        }
     }
 }
 

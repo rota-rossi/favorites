@@ -1,50 +1,38 @@
 import React, { Component } from 'react';
 // import favorites from '../data/favorites'
-import { List, ListItem, Text, Separator, Container, Content, View, Footer, Button, Grid, Col, Spinner } from 'native-base';
+import { List, ListItem, Header, Body, Right, Icon, Title, Text, Separator, Container, Content, View, Footer, Button, Grid, Left, Col, Spinner } from 'native-base';
 import { Actions } from 'react-native-router-flux'
 import { ScrollView, RefreshControl } from 'react-native'
 
 import { inject, observer } from 'mobx-react'
 
-let Datastore = require('react-native-local-mongodb')
-let dbCategories = new Datastore({ filename: 'categoriesDocs', autoload: true })
-let dbSubCategories = new Datastore({ filename: 'subCategoriesDocs', autoload: true })
-
 import FavoriteListItem from './FavoriteListItem'
+import NavHeader from './common/NavHeader'
 
 @inject('favoriteStore') @observer
-export default class FavoritesList extends Component {
+class FavoritesList extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      // categories: [],
-      // subCategories: [],
       refreshing: false
     }
   }
-  // componentDidMount() {
-  //   // this.reloadData()
-  //   const { categories, subCategories } = this.props.favoriteStore
-  //   this.setState({
-  //     categories, subCategories
-  //   })
-  // }
 
-  reloadData() {
+  reloadData = () => {
     this.props.favoriteStore.readData()
   }
 
   render() {
-    const { sortedCategories: categories, subCategories } = this.props.favoriteStore
+    const { categories, subCategories } = this.props.favoriteStore
     return (
       <Container>
-        <Content
-          refreshControl={
+        <NavHeader title='My Favorites' />
+        <Content>
+          {/* refreshControl={
             <RefreshControl
               refreshing={this.state.refreshing}
-              onRefresh={this.reloadData.bind(this)}
-            />}
-        >
+              onRefresh={this.reloadData}
+            />} */}
 
           <List
             style={{ backgroundColor: 'white' }}
@@ -81,3 +69,5 @@ export default class FavoritesList extends Component {
 
   }
 }
+
+export default (FavoritesList)
