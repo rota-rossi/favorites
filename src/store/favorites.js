@@ -87,7 +87,6 @@ class Favorites {
         return this._products.filter(product => product.subCategoryID === subCategoryID)
     }
 
-
     addCategory(category) {
         return new Promise((request, reject) => {
             dbCategories.insert({ categoryName: category }, (err, res) => {

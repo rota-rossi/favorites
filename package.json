@@ -12,6 +12,7 @@
     "native-base": "^2.3.0",
     "react": "16.0.0-alpha.12",
     "react-native": "0.46.4",
+    "react-native-camera": "rota-rossi/react-native-camera",
     "react-native-local-mongodb": "^1.8.2",
     "react-native-router-flux": "github:rota-rossi/react-native-router-flux"
   },

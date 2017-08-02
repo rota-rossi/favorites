@@ -32,6 +32,7 @@ export default class ProductDetails extends Component {
   }
 
   changeProductInformation = (attribute, value) => {
+    console.log(attribute, value)
     this.setState({
       product: {
         ...this.state.product,
@@ -134,10 +135,17 @@ export default class ProductDetails extends Component {
             <Item>
               <Label>UPC Code</Label>
               <Input
-                disabled={disabled}
+                disabled={true}
                 value={product.upc_code.toString()}
-                keyboardType='numeric'
-                onChangeText={(text) => this.changeProductInformation('upc_code', Number(text))} />
+              />
+              {
+                !disabled ?
+                  <Button transparent onPress={() => Actions.BarcodeReader({ returnBarcode: this.changeProductInformation })}>
+                    <Icon active name='ios-barcode-outline' />
+                  </Button>
+                  :
+                  null
+              }
             </Item>
 
             <Item stackedLabel>
