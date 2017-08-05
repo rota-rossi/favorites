@@ -22,15 +22,9 @@ export default class NavHeader extends Component {
         <Body style={{ flex: 3 }}>
           <Title>{this.props.title}</Title>
         </Body>
-        {this.props.right ?
-          <Right>
-            <Button transparent onPress={() => Actions.AddSubCategory()}>
-              <Icon name='ios-home-outline' />
-            </Button>
-          </Right>
-          :
-          <Right />
-        }
+        <Right>
+          {this.props.right && this.props.right()}
+        </Right>
       </Header>
     );
   }

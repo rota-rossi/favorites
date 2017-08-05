@@ -9,7 +9,7 @@
   "dependencies": {
     "mobx": "^3.2.2",
     "mobx-react": "^4.2.2",
-    "native-base": "^2.3.0",
+    "native-base": "^2.3.1",
     "react": "16.0.0-alpha.12",
     "react-native": "0.46.4",
     "react-native-camera": "rota-rossi/react-native-camera",

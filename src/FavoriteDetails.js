@@ -20,8 +20,7 @@ export default class FavoriteDetails extends Component {
 
   render() {
     const { types } = this.state
-    const { _id: subCategoryID, subCategoryName } = this.props.subCategory
-    const { _id: categoryID } = this.props.category
+    const { _id: subCategoryID, subCategoryName, categoryID } = this.props.subCategory
     const products = this.props.favoriteStore.filteredProducts(subCategoryID)
 
     return (

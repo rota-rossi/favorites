@@ -24,7 +24,7 @@ export default class BarcodeReader extends Component {
           onBarCodeRead={this.captureBarcode}
           barcodeTypes={['ean8', 'ean13']}
         >
-          <Text style={styles.capture} onPress={Actions.pop}>[Back]</Text></Camera>
+          <Text style={styles.back} onPress={Actions.pop}>[Back]</Text></Camera>
       </Container>
     );
   }
@@ -38,7 +38,7 @@ const styles = {
     justifyContent: 'flex-end',
     alignItems: 'center'
   },
-  capture: {
+  back: {
     flex: 0,
     backgroundColor: '#fff',
     borderRadius: 5,

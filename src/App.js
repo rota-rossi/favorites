@@ -4,7 +4,6 @@ import { Root } from 'native-base';
 import { Router, Scene } from 'react-native-router-flux';
 import { Provider } from 'mobx-react'
 
-import Nav from './Nav'
 import FavoritesList from './FavoritesList'
 import FavoriteDetails from './FavoriteDetails'
 import ProductDetails from './ProductDetails'
