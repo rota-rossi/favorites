@@ -8,22 +8,41 @@ const PickerItem = Picker.Item
 import NavHeader from './common/NavHeader'
 
 @inject('favoriteStore')
-export default class AddSubCategory extends Component {
+export default class EditSubCategory extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      subCategoryName: '',
-      category: '',
-      categories: []
+      subCategory: { subCategoryName: '', categoryID: '' },
     }
   }
 
-  changeSelectedCategory = (value) => {
-    this.setState({ category: value })
+  componentDidMount() {
+    if (this.props.subCategoryID) {
+      let subCategory = this.props.favoriteStore.getSubCategory(this.props.subCategoryID)
+      this.setState({ subCategory })
+    }
+  }
+
+  changeSubCategoryName = (subCategoryName) => {
+    this.setState({
+      subCategory: {
+        ...this.state.subCategory,
+        subCategoryName
+      }
+    })
+  }
+
+  changeSelectedCategory = (categoryID) => {
+    this.setState({
+      subCategory: {
+        ...this.state.subCategory,
+        categoryID
+      }
+    })
   }
 
   saveSubCategory = () => {
-    this.props.favoriteStore.addSubCategory(this.state.subCategoryName, this.state.category)
+    this.props.favoriteStore.saveSubCategory(this.state.subCategory)
       .then(result => {
         Toast.show({
           text: 'Saved Successfully!',
@@ -45,7 +64,7 @@ export default class AddSubCategory extends Component {
 
   render() {
     const { categories } = this.props.favoriteStore
-    const { subCategoryName, category } = this.state
+    const { subCategoryName, categoryID } = this.state.subCategory
     return (
       <Container>
         <NavHeader title='Add Sub-category' back />
@@ -55,14 +74,14 @@ export default class AddSubCategory extends Component {
               <Label>Sub-category Name:</Label>
               <Input
                 value={subCategoryName}
-                onChangeText={(subCategoryName) => this.setState({ subCategoryName })} />
+                onChangeText={(subCategoryName) => this.changeSubCategoryName(subCategoryName)} />
             </Item>
             <Item>
               <Label>Category</Label>
               <Picker
                 mode="dropdown"
                 placeholder="Select Category"
-                selectedValue={category}
+                selectedValue={categoryID}
                 onValueChange={this.changeSelectedCategory}
               >
                 {categories.map(cat =>

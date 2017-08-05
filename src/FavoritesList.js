@@ -33,35 +33,10 @@ class FavoritesList extends Component {
           .filter(subCategory => subCategory.categoryID === category._id)
       }
     })
-    console.log(this.state)
     return (
       <Container style={{ backgroundColor: 'white' }}>
         <NavHeader title='My Favorites' right={this.RightMenu} />
         <Content>
-          {/* refreshControl={
-            <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={this.reloadData}
-            />} */}
-          {/* {
-            categories.map(category =>
-              <View key={category._id}>
-                <Separator bordered>
-                  <Text>{category.categoryName}</Text>
-                </Separator>
-                <List
-                  style={{ backgroundColor: 'white' }}
-                >
-                  {subCategories
-                    .filter(subCategory => subCategory.categoryID === category._id)
-                    .map(subCategory =>
-                      <FavoriteListItem key={subCategory._id} category={category} subCategory={subCategory} />
-                    )
-                  }
-                </List>
-              </View>
-            )
-          } */}
           <SectionList
             renderItem={({ item }) =>
               <FavoriteListItem
@@ -80,7 +55,7 @@ class FavoritesList extends Component {
               <Button full info onPress={Actions.AddCategory}><Text>Add Category</Text></Button>
             </Col>
             <Col style={{ height: 200 }}>
-              <Button full danger onPress={Actions.AddSubCategory}><Text>Add Sub-category</Text></Button>
+              <Button full danger onPress={Actions.EditSubCategory}><Text>Add Sub-category</Text></Button>
             </Col>
           </Grid>
         </Footer>

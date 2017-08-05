@@ -32,7 +32,6 @@ export default class ProductDetails extends Component {
   }
 
   changeProductInformation = (attribute, value) => {
-    console.log(attribute, value)
     this.setState({
       product: {
         ...this.state.product,
@@ -75,7 +74,6 @@ export default class ProductDetails extends Component {
   saveItem = () => {
     this.props.favoriteStore.saveProduct(this.state.product)
       .then(product => {
-        console.log("product:", product)
         Toast.show({
           text: 'Saved Successfully!',
           type: 'success',
@@ -98,6 +96,7 @@ export default class ProductDetails extends Component {
   render() {
     const { product } = this.state
     const disabled = !this.state.editable
+    console.log(product)
     return (
       <Container>
         <NavHeader back title={product._id ? 'Edit Product' : 'Add Product'} />

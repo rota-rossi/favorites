@@ -1,11 +1,46 @@
 import React, { Component } from 'react';
-import { SwipeRow, Row, Body, Text, Right, Icon, Button, ListItem, View } from 'native-base';
-// import { ListItem, Text, Right, Icon, SwipeRow, Button } from 'native-base';
+import { SwipeRow, Row, Body, Text, Right, Icon, Button, ListItem, View, Toast } from 'native-base';
 import initialCase from '../utils/stringUtils'
 import { Actions } from 'react-native-router-flux';
 import { Alert } from 'react-native'
 
+import { inject } from 'mobx-react'
+
+
+@inject('favoriteStore')
 export default class FavoriteListItem extends Component {
+  showAlert = () => {
+    Alert.alert(
+      'Delete', 'Are you sure? All products from this sub-category will also be deleted!',
+      [
+        {
+          text: 'Yes',
+          onPress: () => {
+            this.props.favoriteStore.deleteSubCategory(this.props.subCategory._id)
+              .then(result => {
+                Toast.show({
+                  text: 'Deleted Successfully!',
+                  type: 'success',
+                  position: 'bottom',
+                  duration: 5000
+                })
+              })
+              .catch(error => {
+                console.log(error)
+                Toast.show({
+                  text: error,
+                  type: 'error',
+                  position: 'bottom',
+                  duration: 5000
+                })
+              })
+          }
+        },
+        {
+          text: 'Cancel'
+        }
+      ])
+  }
   render() {
     const { subCategory, editable } = this.props
     const { subCategoryName } = subCategory
@@ -19,12 +54,12 @@ export default class FavoriteListItem extends Component {
         {this.props.edit ?
           <Right>
             <Row>
-              <Button style={{ flex: 0 }} small transparent>
+              <Button style={{ flex: 0 }} small transparent onPress={() => Actions.EditSubCategory({ subCategoryID: subCategory._id })} >
                 <Icon name='md-create' />
               </Button>
               <Button style={{ flex: 0 }} small transparent
                 onPress={
-                  () => Alert.alert('Delete', 'Are you sure? item ' + subCategory._id, [{ text: 'Yes' }, { text: 'Cancel' }])}>
+                  () => this.showAlert()}>
                 <Icon name='trash' />
               </Button>
             </Row>
