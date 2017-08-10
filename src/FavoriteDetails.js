@@ -18,10 +18,11 @@ export default class FavoriteDetails extends Component {
     }
   }
 
+
   render() {
     const { types } = this.state
-    const { _id: productTypeID, productTypeName, categoryID } = this.props.productType
-    const products = this.props.favoriteStore.filteredProducts(productTypeID)
+    const { _id: productTypeID, productTypeName } = this.props.productType
+    const products = this.props.favoriteStore.getProductsByProductType(productTypeID)
 
     return (
       <Container>
@@ -41,7 +42,7 @@ export default class FavoriteDetails extends Component {
                       .filter(prod => prod.type === type)
                       .map(product =>
                         <ListItem key={product._id} onPress={() => Actions.ProductDetails({ productID: product._id })}>
-                          <Text>{product.product_name}</Text>
+                          <Text>{product.productName}</Text>
                           <Right><Icon name="ios-arrow-forward" /></Right>
                         </ListItem>
                       )
@@ -54,7 +55,7 @@ export default class FavoriteDetails extends Component {
             )}
           </List>
           <Separator />
-          <Button full onPress={() => Actions.ProductDetails({ productTypeID, categoryID })}>
+          <Button full onPress={() => Actions.ProductDetails({ productTypeID })}>
             <Text>Add New Product</Text>
           </Button>
         </Content>

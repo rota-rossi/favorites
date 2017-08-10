@@ -1,116 +1,114 @@
-{
-  "favorite_list": [
-    {
-      "category": "Food",
-      "products": [
-        {
-          "product_type": "salt",
-          "favorites": [
-            {
-              "product_name": "Kosher salt",
-              "upc_code": 1232432434,
-              "manufacturer": "Salton",
-              "image": null,
-              "additional_info": "Still deciding between coarse or powdered"
-            }
-          ],
-          "acceptables": [],
-          "unacceptables": []
-        },
-        {
-          "product_type": "milk",
-          "favorites": [
-            {
-              "product_name": "Nielsen 0.1% skimmed milk",
-              "upc_code": 1232432434,
-              "manufacturer": "Nielsen",
-              "image": null,
-              "additional_info": "It's milk! good for bones"
-            }
-          ],
-          "acceptables": [],
-          "unacceptables": []
-        },
-        {
-          "product_type": "creamer",
-          "favorites": [
-            {
-              "product_name": "Half and Half 5%",
-              "upc_code": 1232432434,
-              "manufacturer": "Nielsen",
-              "image": null,
-              "additional_info": "Delicious!"
-            }
-          ],
-          "acceptables": [],
-          "unacceptables": [
-            {
-              "product_name": "Half and Half 20%",
-              "upc_code": 1232432434,
-              "manufacturer": "Nielsen",
-              "image": null,
-              "additional_info": "Too Fatty!"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "category": "Cleaners",
-      "products": [
-        {
-          "product_type": "cleaning tissue",
-          "favorites": [
-            {
-              "product_name": "Spring Waterfall",
-              "upc_code": 1232432434,
-              "manufacturer": "Lysol",
-              "image": null,
-              "additional_info": "Smell good!"
-            }
-          ],
-          "acceptables": [
-            {
-              "product_name": "Lysol Citrus",
-              "upc_code": 1232432434,
-              "manufacturer": "Lysol",
-              "image": null,
-              "additional_info": "Not as good as the other!"
-            }
-          ],
-          "unacceptables": []
-        },
-        {
-          "product_type": "floor care",
-          "favorites": [
-            {
-              "product_name": "Swiffer Wet lavender",
-              "upc_code": 1232432434,
-              "manufacturer": "Lysol",
-              "image": null,
-              "additional_info": "The purple one - but take care to not buy the one for the wrong swiffer motel!"
-            }
-          ],
-          "acceptables": [
-            {
-              "product_name": "Sweefer Wet Citrus",
-              "upc_code": 1232432434,
-              "manufacturer": "Lysol",
-              "image": null,
-              "additional_info": "Not as good as the other!"
-            }
-          ],
-          "unacceptables": [
-            {
-              "product_name": "Dollarama something-something",
-              "upc_code": 1232432434,
-              "manufacturer": "Who knows?",
-              "image": null,
-              "additional_info": "Awful! but cheap..."
-            }
-          ]
-        }
-      ]
-    }
-  ]
-}
+[
+  {
+    "categoryName": "Food",
+    "products": [
+      {
+        "productTypeName": "salt",
+        "favorites": [
+          {
+            "productName": "Kosher salt",
+            "upcCode": 1232432434,
+            "manufacturer": "Salton",
+            "image": null,
+            "additionalInfo": "Still deciding between coarse or powdered"
+          }
+        ],
+        "acceptables": [],
+        "unacceptables": []
+      },
+      {
+        "productTypeName": "milk",
+        "favorites": [
+          {
+            "productName": "Nielsen 0.1% skimmed milk",
+            "upcCode": 1232432434,
+            "manufacturer": "Nielsen",
+            "image": null,
+            "additionalInfo": "It's milk! good for bones"
+          }
+        ],
+        "acceptables": [],
+        "unacceptables": []
+      },
+      {
+        "productTypeName": "creamer",
+        "favorites": [
+          {
+            "productName": "Half and Half 5%",
+            "upcCode": 1232432434,
+            "manufacturer": "Nielsen",
+            "image": null,
+            "additionalInfo": "Delicious!"
+          }
+        ],
+        "acceptables": [],
+        "unacceptables": [
+          {
+            "productName": "Half and Half 20%",
+            "upcCode": 1232432434,
+            "manufacturer": "Nielsen",
+            "image": null,
+            "additionalInfo": "Too Fatty!"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "categoryName": "Cleaners",
+    "products": [
+      {
+        "productTypeName": "cleaning tissue",
+        "favorites": [
+          {
+            "productName": "Spring Waterfall",
+            "upcCode": 1232432434,
+            "manufacturer": "Lysol",
+            "image": null,
+            "additionalInfo": "Smell good!"
+          }
+        ],
+        "acceptables": [
+          {
+            "productName": "Lysol Citrus",
+            "upcCode": 1232432434,
+            "manufacturer": "Lysol",
+            "image": null,
+            "additionalInfo": "Not as good as the other!"
+          }
+        ],
+        "unacceptables": []
+      },
+      {
+        "productTypeName": "floor care",
+        "favorites": [
+          {
+            "productName": "Swiffer Wet lavender",
+            "upcCode": 1232432434,
+            "manufacturer": "Lysol",
+            "image": null,
+            "additionalInfo": "The purple one - but take care to not buy the one for the wrong swiffer motel!"
+          }
+        ],
+        "acceptables": [
+          {
+            "productName": "Sweefer Wet Citrus",
+            "upcCode": 1232432434,
+            "manufacturer": "Lysol",
+            "image": null,
+            "additionalInfo": "Not as good as the other!"
+          }
+        ],
+        "unacceptables": [
+          {
+            "productName": "Dollarama something-something",
+            "upcCode": 1232432434,
+            "manufacturer": "Who knows?",
+            "image": null,
+            "additionalInfo": "Awful! but cheap..."
+          }
+        ]
+      }
+    ]
+  }
+]

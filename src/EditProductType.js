@@ -34,7 +34,6 @@ export default class EditProductType extends Component {
   }
 
   changeSelectedCategory = (categoryID) => {
-    console.log(categoryID)
     this.setState({
       productType: {
         ...this.state.productType,
@@ -44,24 +43,13 @@ export default class EditProductType extends Component {
   }
 
   saveProductType = () => {
-    console.log(this.state.productType)
     this.props.favoriteStore.saveProductType(this.state.productType)
-      .then(result => {
-        Toast.show({
-          text: 'Saved Successfully!',
-          type: 'success',
-          position: 'bottom',
-          duration: 2000
-        })
-      })
-      .catch(error => {
-        Toast.show({
-          text: error,
-          type: 'error',
-          position: 'bottom',
-          duration: 2000
-        })
-      })
+    Toast.show({
+      text: 'Saved Successfully!',
+      type: 'success',
+      position: 'bottom',
+      duration: 2000
+    })
     Actions.pop()
   }
 
@@ -70,14 +58,14 @@ export default class EditProductType extends Component {
     const { productTypeName, categoryID } = this.state.productType
     return (
       <Container>
-        <NavHeader title='Add Product Type' back />
+        <NavHeader title={this.props.productTypeID ? 'Edit Product Type' : 'Add Product Type'} back />
         <Content>
           <Form style={{ backgroundColor: 'white' }}>
             <Item>
-              <Label>Product Type Name:</Label>
+              <Label>Product Type:</Label>
               <Input
                 value={productTypeName}
-                onChangeText={(productTypeName) => this.changeProductTypeName(productTypeName)} />
+                onChangeText={this.changeProductTypeName} />
             </Item>
             <Item>
               <Label>Category</Label>

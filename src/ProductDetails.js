@@ -8,11 +8,6 @@ import NavHeader from './common/NavHeader'
 
 const PickerItem = Picker.Item
 
-let Datastore = require('react-native-local-mongodb')
-
-let dbProducts = new Datastore({ filename: 'productsDocs', autoload: true })
-
-
 import initialCase from '../utils/stringUtils'
 
 @inject('favoriteStore') @observer
@@ -22,11 +17,12 @@ export default class ProductDetails extends Component {
     this.state = {
       editable: false,
       product: {
-        "product_name": "",
-        "upc_code": 0,
+        "productName": "",
+        "upcCode": "",
         "manufacturer": "",
         "image": null,
-        "additional_info": ""
+        "additionalInfo": "",
+        "type": ""
       }
     }
   }
@@ -49,7 +45,6 @@ export default class ProductDetails extends Component {
         editable: true,
         product: {
           ...this.state.product,
-          categoryID: this.props.categoryID,
           productTypeID: this.props.productTypeID
         }
       })
@@ -73,30 +68,18 @@ export default class ProductDetails extends Component {
 
   saveItem = () => {
     this.props.favoriteStore.saveProduct(this.state.product)
-      .then(product => {
-        Toast.show({
-          text: 'Saved Successfully!',
-          type: 'success',
-          position: 'bottom',
-          duration: 5000
-        })
-        this.setState({ product, editable: false })
-      })
-      .catch(error => {
-        console.log('error', error)
-        Toast.show({
-          text: 'error',
-          type: 'error',
-          position: 'bottom',
-          duration: 5000
-        })
-      })
+    Toast.show({
+      text: 'Saved Successfully!',
+      type: 'success',
+      position: 'bottom',
+      duration: 5000
+    })
+    Actions.pop()
   }
 
   render() {
     const { product } = this.state
     const disabled = !this.state.editable
-    console.log(product)
     return (
       <Container>
         <NavHeader back title={product._id ? 'Edit Product' : 'Add Product'} />
@@ -106,21 +89,29 @@ export default class ProductDetails extends Component {
               <Label>Product Name</Label>
               <Input
                 disabled={disabled}
-                value={product.product_name}
-                onChangeText={(text) => this.changeProductInformation('product_name', text)} />
+                value={product.productName}
+                onChangeText={(text) => this.changeProductInformation('productName', text)} />
             </Item>
             <Item>
               <Label>Type</Label>
-              <Picker
-                mode="dropdown"
-                placeholder="Select One"
-                selectedValue={product.type}
-                onValueChange={this.changeProductType}
-              >
-                <PickerItem label="Favorites" value="favorites" />
-                <PickerItem label="Acceptables" value="acceptables" />
-                <PickerItem label="Unnaceptables" value="unacceptables" />
-              </Picker>
+              {disabled ?
+                <Input
+                  disabled={disabled}
+                  value={initialCase(product.type)}
+                />
+                :
+                <Picker
+                  mode="dropdown"
+                  placeholder="Select One"
+                  selectedValue={product.type}
+                  onValueChange={this.changeProductType}
+                  enabled={this.props.editable}
+                >
+                  <PickerItem label="Favorites" value="favorites" />
+                  <PickerItem label="Acceptables" value="acceptables" />
+                  <PickerItem label="Unnaceptables" value="unacceptables" />
+                </Picker>
+              }
             </Item>
 
             <Item>
@@ -135,7 +126,7 @@ export default class ProductDetails extends Component {
               <Label>UPC Code</Label>
               <Input
                 disabled={true}
-                value={product.upc_code.toString()}
+                value={product.upcCode}
               />
               {
                 !disabled ?
@@ -154,8 +145,8 @@ export default class ProductDetails extends Component {
                 multiline={true}
                 numberOfLines={5}
                 style={{ height: 120, marginTop: 8 }}
-                value={product.additional_info}
-                onChangeText={(text) => this.changeProductInformation('additional_info', text)}
+                value={product.additionalInfo}
+                onChangeText={(text) => this.changeProductInformation('additionalInfo', text)}
               />
             </Item>
             <Separator />

@@ -7,7 +7,7 @@ import { Provider } from 'mobx-react'
 import FavoritesList from './FavoritesList'
 import FavoriteDetails from './FavoriteDetails'
 import ProductDetails from './ProductDetails'
-import AddCategory from './AddCategory'
+import EditCategory from './EditCategory'
 import EditProductType from './EditProductType'
 import BarcodeReader from './BarcodeReader'
 
@@ -21,7 +21,7 @@ const AppNavigator = () => (
     <Scene key='root' hideNavBar>
       <Scene key='Home' component={FavoritesList} title='Favorites' />
       <Scene key='FavoriteDetails' component={FavoriteDetails} title='Favorite Details' />
-      <Scene key='AddCategory' component={AddCategory} title='Add Category' />
+      <Scene key='EditCategory' component={EditCategory} title='Add Category' />
       <Scene key='EditProductType' component={EditProductType} title='Add Product Type' />
       <Scene key='ProductDetails' component={ProductDetails} title='Product Details' />
       <Scene key='BarcodeReader' component={BarcodeReader} title='Barcode Reader' />

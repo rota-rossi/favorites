@@ -1,19 +1,13 @@
 import { observable, computed, action } from 'mobx'
-
-var Datastore = require('react-native-local-mongodb')
-var dbCategories = new Datastore({ filename: 'categoriesDocs', autoload: true })
-var dbProductTypes = new Datastore({ filename: 'productTypesDocs', autoload: true })
-var dbProducts = new Datastore({ filename: 'productsDocs', autoload: true })
-
+import { persist, create } from 'mobx-persist'
+import uuid from 'uuid'
+import { AsyncStorage } from 'react-native'
 
 class Favorites {
-  @observable _categories = [];
-  @observable _productTypes = [];
-  @observable _products = [];
 
-  constructor() {
-    this.readData()
-  }
+  @persist('list') @observable _categories = [];
+  @persist('list') @observable _productTypes = [];
+  @persist('list') @observable _products = [];
 
   @computed get categories() {
     return this._categories.sort(
@@ -21,12 +15,14 @@ class Favorites {
         a.categoryName < b.categoryName ? -1 : 1
     )
   }
+
   @computed get productTypes() {
     return this._productTypes.sort(
       (a, b) =>
         a.productTypeName < b.productTypeName ? -1 : 1
     )
   }
+
   @computed get products() {
     return this._products.sort(
       (a, b) =>
@@ -34,165 +30,107 @@ class Favorites {
     )
   }
 
-  readData() {
-    this.readCategories()
-    this.readProductTypes()
-    this.readProducts()
-  }
-
-  readCategories() {
-    dbCategories.loadDatabase((err) => {
-      dbCategories.find({}, (err, categories) => {
-        if (err) {
-          console.error(err)
-        } else {
-          console.debug(categories)
-          this._categories = categories
-        }
-      })
-    })
-  }
-  readProductTypes() {
-    dbProductTypes.loadDatabase((err) => {
-      dbProductTypes.find({}, (err, productTypes) => {
-        if (err) {
-          console.debug(err)
-        } else {
-          console.debug(productTypes)
-          this._productTypes = productTypes
-        }
-      })
-    })
-  }
-  readProducts() {
-    dbProducts.loadDatabase((err) => {
-      dbProducts.find({}, (err, products) => {
-        if (err) {
-          console.debug(err)
-        } else {
-          console.debug(products)
-          this._products = products
-        }
-      })
-    })
+  @computed get productTypesByCategory() {
+    return this.categories.map(
+      category => ({
+        _id: category._id,
+        categoryName: category.categoryName,
+        data: this.productTypes.filter(productType => productType.categoryID === category._id)
+      }))
   }
 
   getProduct(productID) {
-    return this._products.find(product => product._id === productID)
+    return this.products.find(product => product._id === productID)
   }
   getProductType(productTypeID) {
-    return this._productTypes.find(productType => productType._id === productTypeID)
+    return this.productTypes.find(productType => productType._id === productTypeID)
   }
 
-  filteredProductTypes(categoryID) {
-
-    return this._productTypes.filter(productType => productType.categoryID === categoryID)
+  getProductTypesByCategory(categoryID) {
+    return this.productTypes.filter(productType => productType.categoryID === categoryID)
   }
 
-  filteredProducts(productTypeID) {
-    return this._products.filter(product => product.productTypeID === productTypeID)
+  getProductsByProductType(productTypeID) {
+    return this.products.filter(product => product.productTypeID === productTypeID)
   }
 
-  @action addCategory(category) {
-    return new Promise((request, reject) => {
-      dbCategories.insert({ categoryName: category }, (err, res) => {
-        if (err) {
-          reject(err)
-        } else {
-          this.readCategories()
-          request(res)
-        }
-      })
+  @action saveCategory(editedCategory) {
+    this._categories = editedCategory._id ?
+      this._categories.map(
+        category =>
+          category._id === editedCategory._id
+            ? editedCategory
+            : category
+      ) :
+      [...this._categories, {
+        _id: uuid(),
+        ...editedCategory
+      }]
+  }
+
+  @action deleteCategory(categoryID) {
+    this._categories = this._categories.filter(
+      category => category._id !== categoryID
+    )
+    this._productTypes = this._productTypes.filter(
+      productType => productType.categoryID !== categoryID
+    )
+    this._products = this._products.filter(
+      product => product.categoryID !== categoryID
+    )
+  }
+
+  @action saveProductType(editedProductType) {
+    console.log({
+      _id: uuid(),
+      ...editedProductType
     })
-  }
-
-  @action saveProductType(productType) {
-    if (productType._id) {
-      return new Promise((request, reject) => {
-        dbProductTypes.update({ _id: productType._id }, productType, (err, res) => {
-          console.debug(res)
-          if (err) {
-            reject(err)
-          } else {
-            dbProducts.update({ productTypeID: productType._id }, { $set: { categoryID: productType.categoryID } }, { multi: true }, (err, res) => {
-              console.debug(res)
-              if (err) {
-                reject(err)
-              } else {
-                this.readProductTypes()
-                this.readProducts()
-                request(res)
-              }
-            })
-          }
-        })
-      })
-    } else {
-      return new Promise((request, reject) => {
-        dbProductTypes.insert(productType, (err, res) => {
-          console.debug(res)
-          if (err) {
-            reject(err)
-          } else {
-            this.readProductTypes()
-            request(res)
-          }
-        })
-      })
-    }
+    this._productTypes = editedProductType._id ?
+      this._productTypes.map(
+        productType =>
+          productType._id === editedProductType._id
+            ? editedProductType
+            : productType
+      ) :
+      [...this._productTypes, {
+        _id: uuid(),
+        ...editedProductType
+      }]
   }
 
   @action deleteProductType(productTypeID) {
-    console.debug(productTypeID)
-    return new Promise((request, reject) => {
-      dbProductTypes.remove({ _id: productTypeID }, (err, res) => {
-        console.debug(res)
-        if (err) {
-          reject(err)
-        } else {
-          dbProducts.remove({ productTypeID: productTypeID }, { multi: true }, (err, res) => {
-            console.debug(res)
-            if (err) {
-              reject(err)
-            } else {
-              this.readProductTypes()
-              this.readProducts()
-              request(res)
-            }
-          })
-
-        }
-      })
-    })
+    this._productTypes = this._productTypes.filter(
+      productType => productType._id !== productTypeID
+    )
+    this._products = this._products.filter(
+      product => product.productTypeID !== productTypeID
+    )
   }
-  @action saveProduct(product) {
-    if (product._id) {
-      return new Promise((request, reject) => {
-        dbProducts.update({ _id: product._id }, product, (err, res) => {
-          if (err) {
-            reject(err)
-          } else {
-            this.readProducts()
-            request(product)
-          }
-        })
 
-      })
-    } else {
-      return new Promise((request, reject) => {
-        dbProducts.insert(product, (err, res) => {
-          if (err) {
-            reject(err)
-          } else {
-            this.readProducts()
-            request(res)
-          }
-        })
-      })
-    }
+  @action saveProduct(editedProduct) {
+    this._products = editedProduct._id ?
+      this._products.map(
+        product =>
+          product._id === editedProduct._id
+            ? editedProduct
+            : product
+      ) :
+      [...this._products, {
+        _id: uuid(),
+        ...editedProduct
+      }]
+  }
+
+  @action deleteProduct(productID) {
+    this._products = this._products.filter(
+      product => product._id !== productID
+    )
   }
 }
 
 const favoriteStore = new Favorites()
+
+const hydrate = create({ storage: AsyncStorage })
+hydrate('favorites', favoriteStore)
 
 export default favoriteStore

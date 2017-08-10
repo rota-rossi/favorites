@@ -9,7 +9,7 @@ export default class BarcodeReader extends Component {
 
   captureBarcode = (data, bounds) => {
     Actions.pop()
-    this.props.returnBarcode('upc_code', data.data);
+    this.props.returnBarcode('upcCode', data.data.toString());
   }
 
   render() {
