@@ -18,16 +18,16 @@ export default class AddCategory extends Component {
         Toast.show({
           text: 'Saved Successfully!',
           type: 'success',
-          position: 'bottom',
-          duration: 5000
+          position: 'top',
+          duration: 2000
         })
       })
       .catch(error => {
         Toast.show({
           text: error,
           type: 'error',
-          position: 'bottom',
-          duration: 5000
+          position: 'top',
+          duration: 2000
         })
       })
     Actions.pop()

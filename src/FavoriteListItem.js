@@ -11,18 +11,18 @@ import { inject } from 'mobx-react'
 export default class FavoriteListItem extends Component {
   showAlert = () => {
     Alert.alert(
-      'Delete', 'Are you sure? All products from this sub-category will also be deleted!',
+      'Delete', 'Are you sure? All products of this type will also be deleted!',
       [
         {
           text: 'Yes',
           onPress: () => {
-            this.props.favoriteStore.deleteSubCategory(this.props.subCategory._id)
+            this.props.favoriteStore.deleteProductType(this.props.productType._id)
               .then(result => {
                 Toast.show({
                   text: 'Deleted Successfully!',
                   type: 'success',
-                  position: 'bottom',
-                  duration: 5000
+                  position: 'top',
+                  duration: 2000
                 })
               })
               .catch(error => {
@@ -30,8 +30,8 @@ export default class FavoriteListItem extends Component {
                 Toast.show({
                   text: error,
                   type: 'error',
-                  position: 'bottom',
-                  duration: 5000
+                  position: 'top',
+                  duration: 2000
                 })
               })
           }
@@ -42,19 +42,19 @@ export default class FavoriteListItem extends Component {
       ])
   }
   render() {
-    const { subCategory, editable } = this.props
-    const { subCategoryName } = subCategory
+    const { productType, editable } = this.props
+    const { productTypeName } = productType
     return (
       <ListItem
-        onPress={() => !this.props.edit ? Actions.FavoriteDetails({ subCategory }) : null}
+        onPress={() => !this.props.edit ? Actions.FavoriteDetails({ productType }) : null}
       >
         <Text>
-          {initialCase(subCategoryName)}
+          {initialCase(productTypeName)}
         </Text>
         {this.props.edit ?
           <Right>
             <Row>
-              <Button style={{ flex: 0 }} small transparent onPress={() => Actions.EditSubCategory({ subCategoryID: subCategory._id })} >
+              <Button style={{ flex: 0 }} small transparent onPress={() => Actions.EditProductType({ productTypeID: productType._id })} >
                 <Icon name='md-create' />
               </Button>
               <Button style={{ flex: 0 }} small transparent
@@ -66,7 +66,7 @@ export default class FavoriteListItem extends Component {
           </Right>
           :
           <Right>
-            <Icon name="ios-arrow-forward" />
+            <Icon name="ios-arrow-forward" style={{ color: '#FF4081' }} />
           </Right>
         }
       </ListItem>
@@ -83,8 +83,8 @@ export default class FavoriteListItem extends Component {
     //       </Button>
     //     }
     //     body={
-    //       <ListItem onPress={() => Actions.FavoriteDetails({ subCategory })}>
-    //         <Text>{initialCase(subCategoryName)}</Text>
+    //       <ListItem onPress={() => Actions.FavoriteDetails({ productType })}>
+    //         <Text>{initialCase(productTypeName)}</Text>
     //       </ListItem>
     //     }
     //   />

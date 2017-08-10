@@ -19,18 +19,18 @@ class FavoritesList extends Component {
   }
 
   RightMenu = () =>
-    <Button transparent onPress={() => this.setState({ editItems: !this.state.editItems })}>
+    <Button transparent light onPress={() => this.setState({ editItems: !this.state.editItems })}>
       <Text>{this.state.editItems ? 'Done' : 'Edit'}</Text>
     </Button>
 
 
   render() {
-    const { categories, subCategories } = this.props.favoriteStore
+    const { categories, productTypes } = this.props.favoriteStore
     let data = categories.map(category => {
       return {
         ...category,
-        data: subCategories
-          .filter(subCategory => subCategory.categoryID === category._id)
+        data: productTypes
+          .filter(productType => productType.categoryID === category._id)
       }
     })
     return (
@@ -40,11 +40,11 @@ class FavoritesList extends Component {
           <SectionList
             renderItem={({ item }) =>
               <FavoriteListItem
-                subCategory={item}
+                productType={item}
                 edit={this.state.editItems}
               />
             }
-            renderSectionHeader={({ section }) => <Separator bordered><Text>{section.categoryName}</Text></Separator>}
+            renderSectionHeader={({ section }) => <Separator bordered><Text>{section.categoryName.toUpperCase()}</Text></Separator>}
             sections={data}
             keyExtractor={item => item._id}
           />
@@ -55,7 +55,7 @@ class FavoritesList extends Component {
               <Button full info onPress={Actions.AddCategory}><Text>Add Category</Text></Button>
             </Col>
             <Col style={{ height: 200 }}>
-              <Button full danger onPress={Actions.EditSubCategory}><Text>Add Sub-category</Text></Button>
+              <Button full danger onPress={Actions.EditProductType}><Text>Add Product Type</Text></Button>
             </Col>
           </Grid>
         </Footer>

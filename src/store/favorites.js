@@ -2,13 +2,13 @@ import { observable, computed, action } from 'mobx'
 
 var Datastore = require('react-native-local-mongodb')
 var dbCategories = new Datastore({ filename: 'categoriesDocs', autoload: true })
-var dbSubCategories = new Datastore({ filename: 'subCategoriesDocs', autoload: true })
+var dbProductTypes = new Datastore({ filename: 'productTypesDocs', autoload: true })
 var dbProducts = new Datastore({ filename: 'productsDocs', autoload: true })
 
 
 class Favorites {
   @observable _categories = [];
-  @observable _subCategories = [];
+  @observable _productTypes = [];
   @observable _products = [];
 
   constructor() {
@@ -21,10 +21,10 @@ class Favorites {
         a.categoryName < b.categoryName ? -1 : 1
     )
   }
-  @computed get subCategories() {
-    return this._subCategories.sort(
+  @computed get productTypes() {
+    return this._productTypes.sort(
       (a, b) =>
-        a.subCategoryName < b.subCategoryName ? -1 : 1
+        a.productTypeName < b.productTypeName ? -1 : 1
     )
   }
   @computed get products() {
@@ -36,7 +36,7 @@ class Favorites {
 
   readData() {
     this.readCategories()
-    this.readSubCategories()
+    this.readProductTypes()
     this.readProducts()
   }
 
@@ -52,14 +52,14 @@ class Favorites {
       })
     })
   }
-  readSubCategories() {
-    dbSubCategories.loadDatabase((err) => {
-      dbSubCategories.find({}, (err, subCategories) => {
+  readProductTypes() {
+    dbProductTypes.loadDatabase((err) => {
+      dbProductTypes.find({}, (err, productTypes) => {
         if (err) {
           console.debug(err)
         } else {
-          console.debug(subCategories)
-          this._subCategories = subCategories
+          console.debug(productTypes)
+          this._productTypes = productTypes
         }
       })
     })
@@ -80,17 +80,17 @@ class Favorites {
   getProduct(productID) {
     return this._products.find(product => product._id === productID)
   }
-  getSubCategory(subCategoryID) {
-    return this._subCategories.find(subCategory => subCategory._id === subCategoryID)
+  getProductType(productTypeID) {
+    return this._productTypes.find(productType => productType._id === productTypeID)
   }
 
-  filteredSubCategories(categoryID) {
+  filteredProductTypes(categoryID) {
 
-    return this._subCategories.filter(subCategory => subCategory.categoryID === categoryID)
+    return this._productTypes.filter(productType => productType.categoryID === categoryID)
   }
 
-  filteredProducts(subCategoryID) {
-    return this._products.filter(product => product.subCategoryID === subCategoryID)
+  filteredProducts(productTypeID) {
+    return this._products.filter(product => product.productTypeID === productTypeID)
   }
 
   @action addCategory(category) {
@@ -106,20 +106,20 @@ class Favorites {
     })
   }
 
-  @action saveSubCategory(subCategory) {
-    if (subCategory._id) {
+  @action saveProductType(productType) {
+    if (productType._id) {
       return new Promise((request, reject) => {
-        dbSubCategories.update({ _id: subCategory._id }, subCategory, (err, res) => {
+        dbProductTypes.update({ _id: productType._id }, productType, (err, res) => {
           console.debug(res)
           if (err) {
             reject(err)
           } else {
-            dbProducts.update({ subCategoryID: subCategory._id }, { $set: { categoryID: subCategory.categoryID } }, { multi: true }, (err, res) => {
+            dbProducts.update({ productTypeID: productType._id }, { $set: { categoryID: productType.categoryID } }, { multi: true }, (err, res) => {
               console.debug(res)
               if (err) {
                 reject(err)
               } else {
-                this.readSubCategories()
+                this.readProductTypes()
                 this.readProducts()
                 request(res)
               }
@@ -129,12 +129,12 @@ class Favorites {
       })
     } else {
       return new Promise((request, reject) => {
-        dbSubCategories.insert(subCategory, (err, res) => {
+        dbProductTypes.insert(productType, (err, res) => {
           console.debug(res)
           if (err) {
             reject(err)
           } else {
-            this.readSubCategories()
+            this.readProductTypes()
             request(res)
           }
         })
@@ -142,20 +142,20 @@ class Favorites {
     }
   }
 
-  @action deleteSubCategory(subCategoryID) {
-    console.debug(subCategoryID)
+  @action deleteProductType(productTypeID) {
+    console.debug(productTypeID)
     return new Promise((request, reject) => {
-      dbSubCategories.remove({ _id: subCategoryID }, (err, res) => {
+      dbProductTypes.remove({ _id: productTypeID }, (err, res) => {
         console.debug(res)
         if (err) {
           reject(err)
         } else {
-          dbProducts.remove({ subCategoryID: subCategoryID }, { multi: true }, (err, res) => {
+          dbProducts.remove({ productTypeID: productTypeID }, { multi: true }, (err, res) => {
             console.debug(res)
             if (err) {
               reject(err)
             } else {
-              this.readSubCategories()
+              this.readProductTypes()
               this.readProducts()
               request(res)
             }

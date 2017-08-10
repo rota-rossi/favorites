@@ -8,7 +8,7 @@ import FavoritesList from './FavoritesList'
 import FavoriteDetails from './FavoriteDetails'
 import ProductDetails from './ProductDetails'
 import AddCategory from './AddCategory'
-import EditSubCategory from './EditSubCategory'
+import EditProductType from './EditProductType'
 import BarcodeReader from './BarcodeReader'
 
 import favoriteStore from './store/favorites'
@@ -22,7 +22,7 @@ const AppNavigator = () => (
       <Scene key='Home' component={FavoritesList} title='Favorites' />
       <Scene key='FavoriteDetails' component={FavoriteDetails} title='Favorite Details' />
       <Scene key='AddCategory' component={AddCategory} title='Add Category' />
-      <Scene key='EditSubCategory' component={EditSubCategory} title='Add Sub-category' />
+      <Scene key='EditProductType' component={EditProductType} title='Add Product Type' />
       <Scene key='ProductDetails' component={ProductDetails} title='Product Details' />
       <Scene key='BarcodeReader' component={BarcodeReader} title='Barcode Reader' />
     </Scene>
@@ -30,7 +30,7 @@ const AppNavigator = () => (
 )
 
 const App = () => (
-  <Root>
+  <Root style={{ backgroundColor: 'white' }}>
     <Provider favoriteStore={favoriteStore}>
       <AppNavigator />
     </Provider>

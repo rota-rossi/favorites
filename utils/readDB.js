@@ -1,7 +1,7 @@
 
 var Datastore = require('react-native-local-mongodb')
 var dbCategories = new Datastore({ filename: 'categoriesDocs', autoload: true })
-var dbSubCategories = new Datastore({ filename: 'subCategoriesDocs', autoload: true })
+var dbProductTypes = new Datastore({ filename: 'productTypesDocs', autoload: true })
 var dbProducts = new Datastore({ filename: 'productsDocs', autoload: true })
 
 export default function readData() {
@@ -10,7 +10,7 @@ export default function readData() {
     if (err) {
       console.error(err)
     } else {
-      dbSubCategories.find({}, (err, subCategories) => {
+      dbProductTypes.find({}, (err, productTypes) => {
         if (err) {
           console.log(err)
         } else {
@@ -19,7 +19,7 @@ export default function readData() {
               console.log(err)
             } else {
               return new Promise((resolve, reject) => {
-                resolve({ categories, subCategories, products })
+                resolve({ categories, productTypes, products })
               })
             }
           })

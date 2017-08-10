@@ -20,12 +20,12 @@ export default class FavoriteDetails extends Component {
 
   render() {
     const { types } = this.state
-    const { _id: subCategoryID, subCategoryName, categoryID } = this.props.subCategory
-    const products = this.props.favoriteStore.filteredProducts(subCategoryID)
+    const { _id: productTypeID, productTypeName, categoryID } = this.props.productType
+    const products = this.props.favoriteStore.filteredProducts(productTypeID)
 
     return (
       <Container>
-        <NavHeader back title={initialCase(subCategoryName)} />
+        <NavHeader back title={initialCase(productTypeName)} />
         <Content style={{ backgroundColor: 'white' }}>
           <List>
             {types.map(type =>
@@ -54,7 +54,7 @@ export default class FavoriteDetails extends Component {
             )}
           </List>
           <Separator />
-          <Button full onPress={() => Actions.ProductDetails({ subCategoryID, categoryID })}>
+          <Button full onPress={() => Actions.ProductDetails({ productTypeID, categoryID })}>
             <Text>Add New Product</Text>
           </Button>
         </Content>

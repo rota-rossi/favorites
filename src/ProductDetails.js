@@ -50,7 +50,7 @@ export default class ProductDetails extends Component {
         product: {
           ...this.state.product,
           categoryID: this.props.categoryID,
-          subCategoryID: this.props.subCategoryID
+          productTypeID: this.props.productTypeID
         }
       })
     }
