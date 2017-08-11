@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 // import { Text, View } from 'react-native';
-import { Container, Content, Text, Button, Item, Icon, Separator, Label, Input, Form, Right, Toast, Picker } from 'native-base';
+import { Container, Content, Text, Button, Header, Left, Right, Title, Body, Item, Icon, Separator, Label, Input, Form, Toast, Picker, Subtitle, View } from 'native-base';
 import { Actions } from 'react-native-router-flux'
 import { inject, observer } from 'mobx-react'
-
+import { Platform, Image } from 'react-native'
 import NavHeader from './common/NavHeader'
 
 const PickerItem = Picker.Item
@@ -82,7 +82,34 @@ export default class ProductDetails extends Component {
     const disabled = !this.state.editable
     return (
       <Container>
-        <NavHeader back title={product._id ? 'Edit Product' : 'Add Product'} />
+        <Header style={{ backgroundColor: '#673AB7' }}
+          iosBarStyle='light-content'
+        >
+          <Left>
+            <Button iconLeft transparent light onPress={() => Actions.pop()}>
+              <Icon name='ios-arrow-back' />
+              {Platform.OS === 'ios' && <Text>Back</Text>}
+            </Button>
+          </Left>
+          <Body style={{ flex: 3 }}>
+            <Title style={{ color: 'white' }}>
+              {
+                product._id ?
+                  product.productName
+                  : 'Add Product'
+              }
+            </Title>
+            {
+              this.state.editable &&
+              <Subtitle style={{ color: 'white' }}>
+                Edit product
+              </Subtitle>
+            }
+          </Body>
+          <Right>
+            {this.props.right && this.props.right()}
+          </Right>
+        </Header>
         <Content>
           <Form style={{ backgroundColor: 'white' }}>
             <Item>
@@ -92,6 +119,11 @@ export default class ProductDetails extends Component {
                 value={product.productName}
                 onChangeText={(text) => this.changeProductInformation('productName', text)} />
             </Item>
+            {product.image &&
+              <Button full style={{ height: 200 }} transparent onPress={() => Actions.FullScreenImage({ image: product.image })}>
+                <Image style={{ flex: 1, width: null, height: 200, paddingRight: 10 }} source={{ uri: product.image }} />
+              </Button>
+            }
             <Item>
               <Label>Type</Label>
               {disabled ?
@@ -106,6 +138,22 @@ export default class ProductDetails extends Component {
                   selectedValue={product.type}
                   onValueChange={this.changeProductType}
                   enabled={this.props.editable}
+                  renderHeader={(backAction) =>
+                    <Header style={{ backgroundColor: '#673AB7' }}
+                      iosBarStyle='light-content'>
+                      <Left>
+                        <Button iconLeft light transparent onPress={backAction}>
+                          <Icon name='ios-arrow-back' /><Text>Back</Text>
+                        </Button>
+                      </Left>
+                      <Body style={{ flex: 3 }}>
+                        <Title style={{ color: 'white' }}>
+                          Select One
+                      </Title>
+                      </Body>
+                      <Right />
+                    </Header>
+                  }
                 >
                   <PickerItem label="Favorites" value="favorites" />
                   <PickerItem label="Acceptables" value="acceptables" />
@@ -149,7 +197,11 @@ export default class ProductDetails extends Component {
                 onChangeText={(text) => this.changeProductInformation('additionalInfo', text)}
               />
             </Item>
-            <Separator />
+            {this.state.editable &&
+              <Button full warning onPress={() => Actions.ProductCamera({ returnImage: this.changeProductInformation })}>
+                <Text>Capture Image</Text>
+              </Button>
+            }
             {this.state.editable ?
               <Button full primary onPress={this.saveItem}>
                 <Text>Save Changes</Text>

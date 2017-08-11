@@ -39,12 +39,17 @@ class Favorites {
       }))
   }
 
-  getProduct(productID) {
-    return this.products.find(product => product._id === productID)
+  getCategory(categoryID) {
+    return this.categories.find(category => category._id === categoryID)
   }
+
   getProductType(productTypeID) {
     return this.productTypes.find(productType => productType._id === productTypeID)
   }
+  getProduct(productID) {
+    return this.products.find(product => product._id === productID)
+  }
+
 
   getProductTypesByCategory(categoryID) {
     return this.productTypes.filter(productType => productType.categoryID === categoryID)

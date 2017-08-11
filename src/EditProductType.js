@@ -76,15 +76,16 @@ export default class EditProductType extends Component {
                 selectedValue={categoryID}
                 onValueChange={this.changeSelectedCategory}
                 renderHeader={(backAction) =>
-                  <Header>
+                  <Header style={{ backgroundColor: '#673AB7' }}
+                    iosBarStyle='light-content'>
                     <Left>
-                      <Button iconLeft transparent onPress={backAction}>
+                      <Button iconLeft light transparent onPress={backAction}>
                         <Icon name='ios-arrow-back' /><Text>Back</Text>
                       </Button>
                     </Left>
-                    <Body>
-                      <Title>
-                        <Text>Select Category</Text>
+                    <Body style={{ flex: 3 }}>
+                      <Title style={{ color: 'white' }}>
+                        Select Category
                       </Title>
                     </Body>
                     <Right />
