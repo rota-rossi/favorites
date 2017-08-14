@@ -15,6 +15,7 @@
     "react-native": "0.46.4",
     "react-native-camera": "rota-rossi/react-native-camera",
     "react-native-router-flux": "github:rota-rossi/react-native-router-flux",
+    "styled-components": "^2.1.2",
     "uuid": "^3.1.0"
   },
   "devDependencies": {

@@ -6,7 +6,7 @@ import { inject, observer } from 'mobx-react'
 import initialCase from '../utils/stringUtils'
 
 import NavHeader from './common/NavHeader'
-
+import ForwardIcon from './components/ForwardIcon'
 
 @inject('favoriteStore') @observer
 export default class FavoriteDetails extends Component {
@@ -43,7 +43,7 @@ export default class FavoriteDetails extends Component {
                       .map(product =>
                         <ListItem key={product._id} onPress={() => Actions.ProductDetails({ productID: product._id })}>
                           <Text>{product.productName}</Text>
-                          <Right><Icon name="ios-arrow-forward" /></Right>
+                          <Right><ForwardIcon /></Right>
                         </ListItem>
                       )
                     :

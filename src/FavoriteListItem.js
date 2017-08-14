@@ -7,6 +7,8 @@ import { Alert } from 'react-native'
 import { inject } from 'mobx-react'
 
 
+import ForwardIcon from './components/ForwardIcon'
+
 @inject('favoriteStore')
 export default class FavoriteListItem extends Component {
     showAlert = () => {
@@ -55,7 +57,7 @@ export default class FavoriteListItem extends Component {
                     </Right>
                     :
                     <Right>
-                        <Icon name="ios-arrow-forward" style={{ color: '#FF4081' }} />
+                        <ForwardIcon />
                     </Right>
                 }
             </ListItem>
