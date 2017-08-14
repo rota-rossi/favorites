@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Header, Left, Right, Body, Icon, Button, Title, Text } from 'native-base'
-import { Platform } from 'react-native'
+import { Platform, StatusBar } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 
 
@@ -27,7 +27,7 @@ export default class NavHeader extends Component {
         <Right>
           {this.props.right && this.props.right()}
         </Right>
-      </Header>
+      </Header >
     );
   }
 }

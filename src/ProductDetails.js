@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Container, Content, Text, Button, Header, Left, Right, Title, Body, Item, Icon, Separator, Label, Input, Form, Toast, Picker, Subtitle, View } from 'native-base';
 import { Actions } from 'react-native-router-flux'
 import { inject, observer } from 'mobx-react'
-import { Platform, Image } from 'react-native'
+import { Platform, Image, Alert } from 'react-native'
 import NavHeader from './common/NavHeader'
 
 const PickerItem = Picker.Item
@@ -77,11 +77,34 @@ export default class ProductDetails extends Component {
     Actions.pop()
   }
 
+  showAlert = () => {
+    Alert.alert(
+      'Delete', 'Are you sure?',
+      [
+        {
+          text: 'Yes',
+          onPress: () => {
+            this.props.favoriteStore.deleteProduct(this.props.productID)
+            Toast.show({
+              text: 'Deleted Successfully!',
+              type: 'success',
+              position: 'bottom',
+              duration: 2000
+            })
+            Actions.pop()
+          }
+        },
+        {
+          text: 'Cancel'
+        }
+      ])
+  }
+
   render() {
     const { product } = this.state
     const disabled = !this.state.editable
     return (
-      <Container>
+      <Container style={{ backgroundColor: 'white' }}>
         <Header style={{ backgroundColor: '#673AB7' }}
           iosBarStyle='light-content'
         >
@@ -107,7 +130,17 @@ export default class ProductDetails extends Component {
             }
           </Body>
           <Right>
-            {this.props.right && this.props.right()}
+            {this.state.editable ?
+              <Button transparent disabled={!product.productName} light onPress={this.saveItem}>
+                <Text style={{ color: product.productName ? 'white' : 'darkgrey' }}>Done</Text>
+              </Button>
+              :
+              <Button transparent light
+                onPress={this.enableEdit}
+              >
+                <Text>Edit</Text>
+              </Button>
+            }
           </Right>
         </Header>
         <Content>
@@ -119,11 +152,23 @@ export default class ProductDetails extends Component {
                 value={product.productName}
                 onChangeText={(text) => this.changeProductInformation('productName', text)} />
             </Item>
-            {product.image &&
-              <Button full style={{ height: 200 }} transparent onPress={() => Actions.FullScreenImage({ image: product.image })}>
+            <Button
+              full
+              style={{ height: 200 }}
+              transparent
+              onPress={
+                () => this.state.editable ?
+                  Actions.ProductCamera({ returnImage: this.changeProductInformation }) :
+                  (product.image &&
+                    Actions.FullScreenImage({ image: product.image })
+                  )
+              }
+            >
+              {product.image ?
                 <Image style={{ flex: 1, width: null, height: 200, paddingRight: 10 }} source={{ uri: product.image }} />
-              </Button>
-            }
+                : <Text>{this.state.editable ? 'Add New Image' : 'No Image'}</Text>
+              }
+            </Button>
             <Item>
               <Label>Type</Label>
               {disabled ?
@@ -135,6 +180,7 @@ export default class ProductDetails extends Component {
                 <Picker
                   mode="dropdown"
                   placeholder="Select One"
+                  style={{ width: (Platform.OS === 'ios') ? undefined : 200 }}
                   selectedValue={product.type}
                   onValueChange={this.changeProductType}
                   enabled={this.props.editable}
@@ -197,20 +243,9 @@ export default class ProductDetails extends Component {
                 onChangeText={(text) => this.changeProductInformation('additionalInfo', text)}
               />
             </Item>
-            {this.state.editable &&
-              <Button full warning onPress={() => Actions.ProductCamera({ returnImage: this.changeProductInformation })}>
-                <Text>Capture Image</Text>
-              </Button>
-            }
-            {this.state.editable ?
-              <Button full primary onPress={this.saveItem}>
-                <Text>Save Changes</Text>
-              </Button>
-              :
-              <Button full primary
-                onPress={this.enableEdit}
-              >
-                <Text>Edit</Text>
+            {this.state.editable && product._id &&
+              <Button full danger onPress={this.showAlert}>
+                <Text>Delete Product</Text>
               </Button>
             }
           </Form>

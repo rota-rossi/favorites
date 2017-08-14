@@ -39,6 +39,22 @@ class Favorites {
       }))
   }
 
+  @computed get productsByClassification() {
+    return this.products.reduce((accum, product) => {
+      let position = accum.findIndex(item => item.type === product.type)
+      if (position < 0) {
+        console.log('not found: ', product.name)
+        return [...accum, { type: product.type, products: [product] }]
+      } else {
+        let products = [...accum[position].products, product]
+        console.log(accum[position].type, products, position)
+        let newItem = Object.assign({}, accum[position])
+        newItem.products = products
+        return [...accum.slice(0, position), newItem, ...accum.slice(position + 1)]
+      }
+    }, [])
+  }
+
   getCategory(categoryID) {
     return this.categories.find(category => category._id === categoryID)
   }

@@ -92,13 +92,20 @@ export default class EditProductType extends Component {
                   </Header>
                 }
               >
-                {categories.map(cat =>
-                  <Picker.Item key={cat._id} label={cat.categoryName} value={cat._id} />
-                )}
+                {
+                  // HACK: If it breaks, that's the culprit!
+                  Platform.OS === 'android' ?
+                    [<Picker.Item key='select' label='Select...' value={null} />,
+                    categories.map(cat =>
+                      <Picker.Item key={cat._id} label={cat.categoryName} value={cat._id} />
+                    )] :
+                    categories.map(cat =>
+                      <Picker.Item key={cat._id} label={cat.categoryName} value={cat._id} />)
+                }
               </Picker>
             </Item>
             <Separator />
-            <Button full onPress={this.saveProductType}>
+            <Button disabled={!(productTypeName && categoryID)} full onPress={this.saveProductType}>
               <Text>Save Product Type</Text>
             </Button>
           </Form>

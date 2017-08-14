@@ -3264,9 +3264,10 @@ react-native-button@^2.0.0:
 
 react-native-camera@rota-rossi/react-native-camera:
   version "0.9.4"
-  resolved "https://codeload.github.com/rota-rossi/react-native-camera/tar.gz/db5178fd78ae1db788ef7115303bbe38a36babda"
+  resolved "https://codeload.github.com/rota-rossi/react-native-camera/tar.gz/67855e4a2530cc9d6379c05f76a21b5a7ae4566d"
   dependencies:
     opencollective "^1.0.3"
+    prop-types "^15.5.10"
 
 react-native-dismiss-keyboard@1.0.0:
   version "1.0.0"
