@@ -61,6 +61,7 @@ class FavoritesList extends Component {
     }
 
     render() {
+        let { user } = this.props.favoriteStore
         let data = this.props.favoriteStore.productTypesByCategory
         return (
             <Container style={{ backgroundColor: 'white' }}>
@@ -94,16 +95,9 @@ class FavoritesList extends Component {
                         }
                     />
                 </Content>
-                {/* <Footer>
-                    <Grid>
-                        <Col style={{ height: 200, alignItems: 'center' }}>
-                            <Button full info onPress={Actions.EditCategory}><Text>Add Category</Text></Button>
-                        </Col>
-                        <Col style={{ height: 200 }}>
-                            <Button full danger onPress={Actions.EditProductType}><Text>Add Product Type</Text></Button>
-                        </Col>
-                    </Grid>
-                </Footer> */}
+                <Footer>
+                    <Button full primary onPress={Actions.LoginScreen}><Text>Login</Text></Button>
+                </Footer>
             </Container>
         );
 

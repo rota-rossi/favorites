@@ -13,6 +13,7 @@ import EditProductType from './EditProductType'
 import BarcodeReader from './BarcodeReader'
 import ProductCamera from './ProductCamera'
 import FullScreenImage from './FullScreenImage'
+import LoginScreen from './LoginScreen'
 
 import favoriteStore from './store/favorites'
 
@@ -31,6 +32,7 @@ const AppNavigator = () => (
       <Scene key='BarcodeReader' component={BarcodeReader} title='Barcode Reader' />
       <Scene key='ProductCamera' component={ProductCamera} title='Product Camera' />
       <Scene key='FullScreenImage' component={FullScreenImage} title='Image Full screen' />
+      <Scene key='LoginScreen' component={LoginScreen} title='Login' />
     </Scene>
   </Router>
 )

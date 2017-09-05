@@ -1,13 +1,51 @@
-import { observable, computed, action } from 'mobx'
+import { observable, computed, action, autorun } from 'mobx'
 import { persist, create } from 'mobx-persist'
 import uuid from 'uuid'
 import { AsyncStorage } from 'react-native'
+import RNFirebase from 'react-native-firebase';
+
+
+// import fbSettings from '../../utils/firebase_settings'
+
+class Category {
+  @persist @observable categoryName
+  @persist @observable _id
+}
+
+class ProductType {
+  @persist @observable productTypeName
+  @persist @observable _id
+}
+
+class Product {
+  @persist @observable productName
+  @persist @observable _id
+}
+
 
 class Favorites {
 
-  @persist('list') @observable _categories = [];
-  @persist('list') @observable _productTypes = [];
-  @persist('list') @observable _products = [];
+  @persist('list', Category) @observable _categories = [{ _id: '1', categoryName: 'test' }];
+  @persist('list', ProductType) @observable _productTypes = [];
+  @persist('list', Product) @observable _products = [];
+  @observable user
+
+
+  constructor() {
+    this.firebase = RNFirebase.initializeApp({ debug: true, persistence: true });
+    this.db = this.firebase.database()
+    this.auth = this.firebase.auth()
+  }
+
+  @action firebaseConnection() {
+    this.auth.onAuthStateChanged((user) => {
+      this.user = user
+      if (this.user) {
+        console.log('user authenticated: ', user.email)
+        this.db.ref(`users/${user.uid}/`).once('value', (data) => console.log(data.toJSON()))
+      }
+    })
+  }
 
   @computed get categories() {
     return this._categories.sort(
@@ -76,17 +114,21 @@ class Favorites {
   }
 
   @action saveCategory(editedCategory) {
-    this._categories = editedCategory._id ?
-      this._categories.map(
+    if (editedCategory._id) {
+      this._categories = this._categories.map(
         category =>
           category._id === editedCategory._id
             ? editedCategory
             : category
-      ) :
-      [...this._categories, {
-        _id: uuid(),
-        ...editedCategory
-      }]
+      )
+    } else {
+      editedCategory._id = uuid()
+      this._categories = [...this._categories, editedCategory]
+    }
+    if (this.user) {
+      this.db.ref(`users/${this.user.uid}/categories/${editedCategory._id}`)
+        .set(editedCategory)
+    }
   }
 
   @action deleteCategory(categoryID) {
@@ -102,21 +144,27 @@ class Favorites {
   }
 
   @action saveProductType(editedProductType) {
-    console.log({
-      _id: uuid(),
-      ...editedProductType
-    })
-    this._productTypes = editedProductType._id ?
-      this._productTypes.map(
-        productType =>
-          productType._id === editedProductType._id
-            ? editedProductType
-            : productType
-      ) :
-      [...this._productTypes, {
-        _id: uuid(),
-        ...editedProductType
-      }]
+    if (editedProductType._id) {
+      this.firebase.database().ref(`users/${this.user.uid}/productTypes/${editedProductType._id}`)
+        .set(editedProductType)
+        .then(
+        () =>
+          this._productTypes = this._productTypes.map(
+            productType =>
+              productType._id === editedProductType._id
+                ? editedProductType
+                : productType
+          )
+        )
+    } else {
+      let key = uuid()
+      this.firebase.database().ref(`users/${this.user.uid}/productTypes/${key}`)
+        .set(editedProductType)
+        .then(
+        () =>
+          this._productTypes = [...this._productTypes, { _id: key, ...editedProductType }]
+        )
+    }
   }
 
   @action deleteProductType(productTypeID) {
@@ -129,29 +177,49 @@ class Favorites {
   }
 
   @action saveProduct(editedProduct) {
-    this._products = editedProduct._id ?
-      this._products.map(
-        product =>
-          product._id === editedProduct._id
-            ? editedProduct
-            : product
-      ) :
-      [...this._products, {
-        _id: uuid(),
-        ...editedProduct
-      }]
+    if (editedProduct._id) {
+      this.firebase.database().ref(`users/${this.user.uid}/products/${editedProduct._id}`)
+        .set(editedProduct)
+        .then(
+        () => this._products = this._products.map(
+          product =>
+            product._id === editedProduct._id
+              ? editedProduct
+              : product
+        )
+        )
+    } else {
+      let key = uuid()
+      this.firebase.database().ref(`users/${this.user.uid}/products/${key}`)
+        .set(editedProduct)
+        .then(
+        () =>
+          this._products = [...this._products, { _id: key, ...editedProduct }]
+        )
+    }
   }
 
   @action deleteProduct(productID) {
-    this._products = this._products.filter(
-      product => product._id !== productID
-    )
+    this.firebase.database().ref(`users/${this.user.uid}/products/${productID}`).remove()
+      .then(() => {
+        this._products = this._products.filter(
+          product => product._id !== productID
+        )
+      })
   }
 }
 
 const favoriteStore = new Favorites()
 
-const hydrate = create({ storage: AsyncStorage })
+const hydrate = create({ storage: AsyncStorage, jsonify: true })
 hydrate('favorites', favoriteStore)
-
+  .then(
+  // () => {
+  //   favoriteStore._categories = []
+  //   favoriteStore._productTypes = []
+  //   favoriteStore._products = []
+  // }
+  // () => favoriteStore.readFromFireBase()
+  () => favoriteStore.firebaseConnection()
+  )
 export default favoriteStore

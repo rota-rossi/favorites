@@ -25,7 +25,7 @@ export default class EditCategory extends Component {
         Toast.show({
             text: 'Saved Successfully!',
             type: 'success',
-            position: 'top',
+            position: 'bottom',
             duration: 2000
         })
         Actions.pop()
